@@ -19,36 +19,22 @@
     // Your access token can be found at: https://ion.cesium.com/tokens.
     // This is the default access token from your ion account
 
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc";
-
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc';
 
     // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
- const viewer = new Cesium.Viewer("cesiumContainer");
-
-(async () => {
-  try {
-    const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(1678375, {
-      //This tileset doesn't have a location, so we're using a modelMatrix to place it at 0, 0 instead of drawing at the center of the earth
-      modelMatrix: Cesium.Transforms.eastNorthUpToFixedFrame(
-        Cesium.Cartesian3.fromDegrees(0, 0)
-      ),
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+      terrainProvider: Cesium.createWorldTerrain()
+    });    
+    // Add Cesium OSM Buildings, a global 3D buildings layer.
+    const buildingTileset = viewer.scene.primitives.add(Cesium.createOsmBuildings());   
+    // Fly the camera to San Francisco at the given longitude, latitude, and height.
+    viewer.camera.flyTo({
+      destination : Cesium.Cartesian3.fromDegrees(-122.4175, 37.655, 400),
+      orientation : {
+        heading : Cesium.Math.toRadians(0.0),
+        pitch : Cesium.Math.toRadians(-15.0),
+      }
     });
-    viewer.scene.primitives.add(tileset);
-    await viewer.zoomTo(tileset);
-
-    // Apply the default style if it exists
-    const extras = tileset.asset.extras;
-    if (
-      Cesium.defined(extras) &&
-      Cesium.defined(extras.ion) &&
-      Cesium.defined(extras.ion.defaultStyle)
-    ) {
-      tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-})();
   </script>
  </div>
 </body>
