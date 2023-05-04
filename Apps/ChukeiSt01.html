@@ -17,11 +17,11 @@
 <body>
     <div id="cesiumContainer"></div>
     <script>
-        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc';
-        var viewer = new Cesium.Viewer('cesiumContainer');
-        var tileset = new Cesium.Cesium3DTileset({
-            url: Cesium.IonResource.fromAssetId(1678375)
-        });
+       const tileset = viewer.scene.primitives.add(
+  new Cesium.Cesium3DTileset({
+    url: Cesium.IonResource.fromAssetId(1678375),
+  })
+);
         viewer.scene.primitives.add(tileset);
         viewer.zoomTo(tileset);
     </script>
