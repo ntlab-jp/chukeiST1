@@ -17,13 +17,30 @@
 <body>
     <div id="cesiumContainer"></div>
     <script>
-       const tileset = viewer.scene.primitives.add(
-  new Cesium.Cesium3DTileset({
-    url: Cesium.IonResource.fromAssetId(1678375),
-  })
-);
-        viewer.scene.primitives.add(tileset);
-        viewer.zoomTo(tileset);
+// Grant CesiumJS access to your ion assets
+Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc";
+const viewer = new Cesium.Viewer("cesiumContainer");
+
+(async () => {
+  try {
+    const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(1678375);
+    viewer.scene.primitives.add(tileset);
+    await viewer.zoomTo(tileset);
+
+    // Apply the default style if it exists
+    const extras = tileset.asset.extras;
+    if (
+      Cesium.defined(extras) &&
+      Cesium.defined(extras.ion) &&
+      Cesium.defined(extras.ion.defaultStyle)
+    ) {
+      tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+})();
+
     </script>
 </body>
 </html>
