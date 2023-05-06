@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Cesium - Point Cloud with Slider</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.88/Build/Cesium/Widgets/widgets.css">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans:300);
+        html, body, #cesiumContainer {
+            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+            font-family: 'Open Sans', sans-serif; font-weight: 300;
+        }
+        #slider-container {
+            position: absolute;
+            left: 10px; bottom: 10px;
+            width: 200px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #slider-label {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="cesiumContainer"></div>
+    <div id="slider-container">
+        <div id="slider-label">Point Size</div>
+        <input type="range" min="1" max="10" value="5" class="slider" id="point-size-slider">
+    </div>
+    <script>
+        Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc";
+
+        var viewer = new Cesium.Viewer('cesiumContainer');
+        var tileset = new Cesium.Cesium3DTileset({
+            url: Cesium.IonResource.fromAssetId(1678375)
+        });
+        viewer.scene.primitives.add(tileset);
+
+        var pointSizeSlider = document.getElementById('point-size-slider');
+        var pointSize = 5;
+
+        pointSizeSlider.addEventListener('input', function() {
+            pointSize = parseInt(pointSizeSlider.value);
+            tileset.style = new Cesium.Cesium3DTileStyle({
+                pointSize: pointSize
+            });
+        });
+    </script>
+</body>
+</html>
