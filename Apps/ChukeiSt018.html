@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cesium Point Cloud Example</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.84/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.84/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        #cesiumContainer {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .slider-container {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            z-index: 1;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .slider {
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+    <div id="cesiumContainer"></div>
+    <div class="slider-container">
+        <input type="range" min="0.1" max="10" value="1" step="0.1" class="slider" id="slider">
+        <label for="slider">Point Size</label>
+    </div>
+    <script>
+    var accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc'; // あなたのアクセストークンに置き換えてください
+        var viewer = new Cesium.Viewer('cesiumContainer');
+        var tileset = new Cesium.Cesium3DTileset({
+            url: Cesium.IonResource.fromAssetId(1678375)
+        });
+        var pointSize = 1.0;
+        
+        tileset.style = new Cesium.Cesium3DTileStyle({
+            pointSize: pointSize
+        });
+        
+        viewer.scene.primitives.add(tileset);
+        viewer.zoomTo(tileset);
+        
+        var slider = document.getElementById("slider");
+        slider.addEventListener("input", function() {
+            pointSize = parseFloat(slider.value);
+            tileset.style = new Cesium.Cesium3DTileStyle({
+                pointSize: pointSize
+            });
+        });
+    </script>
+</body>
+</html>
