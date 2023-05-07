@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Cesium Slider Example</title>
+    <style>
+      @import url(../ThirdParty/Widgets/Widgets.css);
+      @import url(../ThirdParty/Cesium/Widgets/widgets.css);
+      #cesiumContainer {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      #slider-wrapper {
+        position: absolute;
+        top: 110px;
+        right: 10px;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        display: none;
+      }
+      .cesium-button {
+        background-color: #ffffff;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        margin: 0.2rem;
+        cursor: pointer;
+        outline: none;
+        font-size: 1rem;
+        color: #000000;
+      }
+      .cesium-button:hover {
+        background-color: #cccccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cesiumContainer"></div>
+    <div id="slider-wrapper">
+      <label for="slider">PointSize</label>
+      <input
+        type="range"
+        min="1"
+        max="10"
+        value="5"
+        class="cesium-button"
+        id="slider"
+      />
+    </div>
+    <script src="../ThirdParty/Cesium/Cesium.js"></script>
+    <script>
+      Cesium.Ion.defaultAccessToken =
+        "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+      var viewer = new Cesium.Viewer("cesiumContainer");
+      var tileset = new Cesium.Cesium3DTileset({
+        url: Cesium.IonResource.fromAssetId(9999999),
+      });
+      viewer.scene.primitives.add(tileset);
+
+      // Add slider button
+      var sliderWrapper = document.getElementById("slider-wrapper");
+      var sliderButton = document.createElement("button");
+      sliderButton.innerHTML = "PointSize";
+      sliderButton.classList.add("cesium-button");
+      sliderButton.addEventListener("click", function () {
+        if (sliderWrapper.style.display === "none") {
+          sliderWrapper.style.display = "block";
+        } else {
+          sliderWrapper.style.display = "none";
+        }
+      });
+      var toolbar = document.querySelector(".cesium-viewer-toolbar");
+      toolbar.appendChild(sliderButton);
+
+      // Point size slider
+      var slider = document.getElementById("slider");
+      slider.oninput = function () {
+        tileset.style.pointSize = this.value;
+      };
+    </script>
+  </body>
+</html>
