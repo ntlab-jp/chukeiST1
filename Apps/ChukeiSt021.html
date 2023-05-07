@@ -1,87 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Cesium Slider Example</title>
+<html>
+<head>
+    <title>ChukeiST.Cesium Point Cloud view</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.84/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.84/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
     <style>
-      @import url(../ThirdParty/Widgets/Widgets.css);
-      @import url(../ThirdParty/Cesium/Widgets/widgets.css);
-      #cesiumContainer {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-      #slider-wrapper {
-        position: absolute;
-        top: 110px;
-        right: 10px;
-        z-index: 1;
-        background-color: rgba(0, 0, 0, 0.7);
-        padding: 10px;
-        display: none;
-      }
-      .cesium-button {
-        background-color: #ffffff;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        margin: 0.2rem;
-        cursor: pointer;
-        outline: none;
-        font-size: 1rem;
-        color: #000000;
-      }
-      .cesium-button:hover {
-        background-color: #cccccc;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="cesiumContainer"></div>
-    <div id="slider-wrapper">
-      <label for="slider">PointSize</label>
-      <input
-        type="range"
-        min="1"
-        max="10"
-        value="5"
-        class="cesium-button"
-        id="slider"
-      />
-    </div>
-    <script src="../ThirdParty/Cesium/Cesium.js"></script>
-    <script>
-      Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc" ;
-      var viewer = new Cesium.Viewer("cesiumContainer");
-      var tileset = new Cesium.Cesium3DTileset({
-      url: Cesium.IonResource.fromAssetId(1678375)
-      });
-      viewer.scene.primitives.add(tileset);
-
-      // Add slider button
-      var sliderWrapper = document.getElementById("slider-wrapper");
-      var sliderButton = document.createElement("button");
-      sliderButton.innerHTML = "PointSize";
-      sliderButton.classList.add("cesium-button");
-      sliderButton.addEventListener("click", function () {
-        if (sliderWrapper.style.display === "none") {
-          sliderWrapper.style.display = "block";
-        } else {
-          sliderWrapper.style.display = "none";
+        #cesiumContainer {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
-      });
-      var toolbar = document.querySelector(".cesium-viewer-toolbar");
-      toolbar.appendChild(sliderButton);
 
-      // Point size slider
-      var slider = document.getElementById("slider");
-      slider.oninput = function () {
-        tileset.style.pointSize = this.value;
-      };
+        #sliderContainer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #sliderTitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="cesiumContainer"></div>
+    <div id="sliderContainer">
+        <div id="sliderTitle">Point Size</div>
+        <input type="range" min="1" max="10" value="1" step="0.1" id="slider">
+    </div>
+    <script>
+        Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc" ;
+        var viewer = new Cesium.Viewer('cesiumContainer');
+        var tileset = new Cesium.Cesium3DTileset({
+            url: Cesium.IonResource.fromAssetId(1682818)
+        });
+
+        // ポイントクラウドのスタイルオブジェクトを作成して、点のサイズを変更する
+        var slider = document.getElementById("slider");
+        slider.oninput = function() {
+            tileset.style = new Cesium.Cesium3DTileStyle({
+                pointSize: parseFloat(this.value) // サイズを変更する値を指定する
+            });
+        };
+
+        // ズームを変更しても点群全体が画面に表示されるように調整
+        viewer.zoomTo(tileset);
+        viewer.scene.primitives.add(tileset);
     </script>
-  </body>
+</body>
 </html>
