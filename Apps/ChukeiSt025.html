@@ -1,79 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Cesium Example</title>
-    <script src="https://cesium.com/downloads/cesiumjs/releases/1.83/Build/Cesium/Cesium.js"></script>
-    <link href="https://cesium.com/downloads/cesiumjs/releases/1.83/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <head>
+    <title>Cesium - Point Cloud Example</title>
+    <script src="https://unpkg.com/cesium/Build/Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/cesium/Build/Cesium/Widgets/widgets.css">
     <style>
-        html, body, #cesiumContainer {
-            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
-        }
-        .cesium-button {
-            background-color: white !important;
-            border-color: white !important;
-        }
-        #slider-container {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            z-index: 1;
-            background-color: white;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid black;
-        }
+      html, body, #cesiumContainer {
+        width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+      #sliderContainer {
+        position: absolute;
+        left: 10px;
+        top: 50px;
+        z-index: 1;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+      }
     </style>
-</head>
-<body>
-<div id="cesiumContainer"></div>
-<div id="slider-container">
-    <label>Point Size:</label>
-    <input type="range" min="1" max="10" value="5" class="slider" id="point-size-slider">
-</div>
-<script>
+  </head>
+  <body>
+    <div id="cesiumContainer"></div>
+    <div id="sliderContainer">
+      <input type="range" min="1" max="10" value="5" class="slider" id="pointSizeSlider">
+      <br>
+      <label for="pointSizeSlider">Point Size</label>
+    </div>
+    <script>
     Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc" ;
 
-    // Create the viewer
-    var viewer = new Cesium.Viewer('cesiumContainer', {
-        terrainProvider: Cesium.createWorldTerrain()
-    });
+      var viewer = new Cesium.Viewer('cesiumContainer', {
+        imageryProvider : Cesium.createWorldImagery(),
+        baseLayerPicker: false,
+        geocoder: false,
+        homeButton: false,
+        sceneModePicker: false,
+        navigationHelpButton: false,
+        fullscreenButton: false,
+        animation: false,
+        timeline: false,
+        vrButton: false
+      });
 
-    // Set the initial camera position
-    viewer.camera.setView({
-        destination: Cesium.Cartesian3.fromDegrees(140.318, 35.132, 1000),
+      var camera = viewer.camera;
+      camera.setView({
+        destination: Cesium.Cartesian3.fromDegrees(140.153804, 35.739453, 500), // 香取市佐原駅
         orientation: {
-            heading: Cesium.Math.toRadians(0.0),
-            pitch: Cesium.Math.toRadians(-90.0),
-            roll: Cesium.Math.toRadians(0.0)
+          heading: Cesium.Math.toRadians(0),
+          pitch: Cesium.Math.toRadians(-30),
+          roll: Cesium.Math.toRadians(0)
         }
-    });
+      });
 
-    // Load the tilesets
-    var tileset1 = new Cesium.Cesium3DTileset({
+      var tileset1 = new Cesium.Cesium3DTileset({
         url: Cesium.IonResource.fromAssetId(1682922)
-    });
+      });
 
-    var tileset2 = new Cesium.Cesium3DTileset({
+      var tileset2 = new Cesium.Cesium3DTileset({
         url: Cesium.IonResource.fromAssetId(1683434)
-    });
+      });
 
-    var tileset3 = new Cesium.Cesium3DTileset({
+      var tileset3 = new Cesium.Cesium3DTileset({
         url: Cesium.IonResource.fromAssetId(1684076)
-    });
+      });
 
-    // Add the tilesets to the viewer
-    viewer.scene.primitives.add(tileset1);
-    viewer.scene.primitives.add(tileset2);
-    viewer.scene.primitives.add(tileset3);
+      viewer.scene.primitives.add(tileset1);
+      viewer.scene.primitives.add(tileset2);
+      viewer.scene.primitives.add(tileset3);
 
-    // Update point size based on the slider value
-    var pointSizeSlider = document.getElementById('point-size-slider');
-    pointSizeSlider.addEventListener('input', function () {
-        var pointSize = parseFloat(pointSizeSlider.value);
+      var pointSizeSlider = document.getElementById('pointSizeSlider');
+      pointSizeSlider.addEventListener('input', function() {
+        var pointSize = parseFloat(this.value);
         tileset1.style.pointSize = pointSize;
         tileset2.style.pointSize = pointSize;
         tileset3.style.pointSize = pointSize;
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>
