@@ -44,7 +44,7 @@
 
       var camera = viewer.camera;
       camera.setView({
-        destination: Cesium.Cartesian3.fromDegrees(140.1493092, 35.721188, 400), // katori jingu
+        destination: Cesium.Cartesian3.fromDegrees(140.1539, 35.7454, 1000), // 佐原駅
         orientation: {
           heading: Cesium.Math.toRadians(0),
           pitch: Cesium.Math.toRadians(-30),
@@ -71,9 +71,15 @@
       var pointSizeSlider = document.getElementById('pointSizeSlider');
       pointSizeSlider.addEventListener('input', function() {
         var pointSize = parseFloat(this.value);
-        tileset1.style.pointSize = pointSize;
-        tileset2.style.pointSize = pointSize;
-        tileset3.style.pointSize = pointSize;
+        tileset1.style = new Cesium.Cesium3DTileStyle({
+          pointSize: pointSize
+        });
+        tileset2.style = new Cesium.Cesium3DTileStyle({
+          pointSize: pointSize
+        });
+        tileset3.style = new Cesium.Cesium3DTileStyle({
+          pointSize: pointSize
+        });
       });
     </script>
   </body>
