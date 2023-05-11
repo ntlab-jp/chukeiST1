@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cesium Sample</title>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script src="https://cesium.com/releases/1.80/Cesium.js"></script>
+  <script>
+    // Import the Cesium library
+    import * as Cesium from "cesium";
+
+    // Create a viewer
+    const viewer = new Cesium.Viewer("cesiumContainer");
+
+    // Set the access token
+    viewer.options.access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlMGNlYWEyNi02Y2Y3LTRmNDMtYjQwNC1jZjUwODcwNWJiOWUiLCJpZCI6MTM2MzE2LCJpYXQiOjE2ODI5NzAyMjN9.gaEcLX_LVYuHjnrjaak3ykqGH94ENireAkbST1lhUQc;
+
+    // Set the Google Maps API key
+    viewer.options.google_maps_api_key = AIzaSyCTKRzys92SN8AnrVqRj6nmOoRXT26D1rM;
+
+    // Add a base layer
+    viewer.scene.baseLayers.add(Cesium.createWorldTerrain());
+
+    // Add a 3D tile layer
+    const tileset = Cesium.create3DTileset({
+      url: "https://cesium.scene3d.io/3dtiles/brooklyn.json",
+      boundingSphere: Cesium.Ellipsoid.WGS84.boundingSphere,
+    });
+    viewer.scene.primitives.add(tileset);
+
+    // Set the camera position
+    viewer.camera.position = Cesium.Cartesian3.fromDegrees(-73.98583333333333, 40.71277777777778, 3000);
+
+    // Add a text label
+    const label = new Cesium.Label({
+      text: "Hello, world!",
+      position: Cesium.Cartesian3.fromDegrees(-73.98583333333333, 40.71277777777778, 2000),
+      color: Cesium.Color.RED,
+      scale: 1.0,
+    });
+    viewer.entities.add(label);
+
+    // Start the viewer
+    viewer.start();
+  </script>
+</body>
+</html>
